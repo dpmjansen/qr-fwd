@@ -20,7 +20,6 @@
   </properties>
 
   <modules>
-    <module>qr-fwd-domain</module>
     <module>qr-fwd-service</module>
     <module>qr-fwd-api</module>
   </modules>
