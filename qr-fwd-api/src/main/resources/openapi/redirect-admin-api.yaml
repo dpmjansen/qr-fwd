@@ -1,0 +1,9 @@
+openapi: 3.1.0
+info:
+  title: Redirect Admin API
+  description: Redirect Admin API
+  version: 1.0.0
+paths:
+  /api/admin/redirect/refresh:
+    description: trigger refresh of all subscribers caches, causes retrieval of api
+  
