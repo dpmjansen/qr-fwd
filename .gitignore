@@ -1,9 +1,6 @@
 # Compiled class files
 *.class
 
-# Dependency directories
-target/
-
 # IDE specific files
 .idea/
 *.iml
