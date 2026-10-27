@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: Redirect Configuration API
+  description: Redirect Configuration API
+  version: 1.0.0
+paths:
+  /api/redirect-configs:
+    get:
+      description: retrieve all configurations
+      responses:
+        '200':
+          description: all configurations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RedirectConfiguration'
+  /api/redirect-configs/{id}:
+    get:
+      description: retrieve single config based on uuid
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: single config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectConfiguration'
+
+components:
+  schemas:
+    RedirectConfiguration:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        destinationUrl:
+          type: string
+        redirectType:
+          type: integer
+          enum: [307, 308]
+        enabled:
+          type: boolean
+        description:
+          type: string

@@ -1,0 +1,39 @@
+openapi: 3.1.0
+info:
+  title: Redirect
+  description: Redirect
+  version: 1.0.0
+paths:
+  /redirect/{uuid}:
+    get:
+      description: set Location header to configured redirect url
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '307':
+          description: 'temp redirect'
+          headers:
+            Location:
+              description: Location header
+              schema:
+                type: string
+            X-Redirect-UUID:
+              description: associated configured uuid
+              schema:
+                type: string
+        '308':
+          description: 'perm redirect'
+          headers:
+            Location:
+              description: Location header
+              schema:
+                type: string
+            X-Redirect-UUID:
+              description: associated configured uuid
+              schema:
+                type: string
