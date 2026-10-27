@@ -14,11 +14,8 @@ import java.util.UUID;
 @Repository
 public interface RedirectConfigurationRepository extends JpaRepository<RedirectConfiguration, Long> {
 
-    /**
-     * Find redirect configuration by UUID.
-     * @param uuid the UUID to match
-     * @return the matching configuration, or empty if not found
-     */
     Optional<RedirectConfiguration> findByUuid(UUID uuid);
+
+    Optional<RedirectConfiguration> deleteByUuid(UUID uuid);
 
 }

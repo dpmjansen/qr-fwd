@@ -20,6 +20,7 @@
   </properties>
 
   <modules>
+    <module>qr-fwd-domain</module>
     <module>qr-fwd-service</module>
     <module>qr-fwd-api</module>
   </modules>
@@ -29,7 +30,7 @@
       <dependency>
         <groupId>nl.daveit.qrfwd</groupId>
         <artifactId>qr-fwd-domain</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
 
       <!--      openapi-->

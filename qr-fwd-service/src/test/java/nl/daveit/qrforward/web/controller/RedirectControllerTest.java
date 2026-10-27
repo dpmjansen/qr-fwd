@@ -42,7 +42,7 @@ class RedirectControllerTest {
         //given
         UUID reqId = UUID.randomUUID();
 
-        RedirectConfiguration domainConfig = new RedirectConfiguration(reqId, "https://temp.example.com", 307, true, null);
+        RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://temp.example.com", 307, true, null);
         nl.daveit.qrforward.generated.web.model.RedirectConfiguration web = new nl.daveit.qrforward.generated.web.model.RedirectConfiguration();
         web.setUuid(reqId);
         web.setDestinationUrl(domainConfig.getDestinationUrl());
@@ -63,7 +63,7 @@ class RedirectControllerTest {
         //given
         UUID reqId = UUID.randomUUID();
 
-        RedirectConfiguration domainConfig = new RedirectConfiguration(reqId, "https://perm.example.com", 308, true, null);
+        RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://perm.example.com", 308, true, null);
         nl.daveit.qrforward.generated.web.model.RedirectConfiguration web = new nl.daveit.qrforward.generated.web.model.RedirectConfiguration();
         web.setUuid(reqId);
         web.setDestinationUrl(domainConfig.getDestinationUrl());

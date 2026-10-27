@@ -1,10 +1,12 @@
 package nl.daveit.qrforward.integration;
 
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.RedirectKey;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.model.RedirectConfigurationResponse;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -27,8 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationIT {
 
-    private static final String REDIRECT_ENDPOINT = "/redirect";
-    private static final String API_REDIRECT_CONFIGS_ENDPOINT = "/api/redirect-configs";
+    private static final String ENDPOINT_API_REDIRECT_CONFIGS = "/api/redirect/configurations";
+    private static final String ENDPOINT_API_REDIRECT = "/api/redirect";
 
     private RestTestClient client;
 
@@ -66,39 +68,53 @@ public class ApplicationIT {
     @Test
     void nonExistingConfig() {
         client.get()
-                .uri(REDIRECT_ENDPOINT + "/" + UUID.randomUUID())
+                .uri(ENDPOINT_API_REDIRECT + "/" + UUID.randomUUID())
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     void existingTempRedirect() {
-        client.get()
-                .uri(REDIRECT_ENDPOINT + "/126147c0-05a9-4a83-8b59-f3c8763a85c0")
+        var body = client.get()
+                .uri(ENDPOINT_API_REDIRECT + "/126147c0-05a9-4a83-8b59-f3c8763a85c0")
                 .exchange()
-                .expectStatus().isTemporaryRedirect();
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<RedirectConfigurationResponse>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body)
+                .extracting(RedirectConfigurationResponse::getUuid)
+                .isEqualTo(UUID.fromString("126147c0-05a9-4a83-8b59-f3c8763a85c0"));
     }
 
     @Test
     void existingPermanentRedirect() {
-        client.get()
-                .uri(REDIRECT_ENDPOINT + "/6f372f07-f8c3-47f7-90f4-f5c3e980f23f")
+        var body = client.get()
+                .uri(ENDPOINT_API_REDIRECT + "/6f372f07-f8c3-47f7-90f4-f5c3e980f23f")
                 .exchange()
-                .expectStatus().isPermanentRedirect();
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<RedirectConfigurationResponse>() {})
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(body)
+                .extracting(RedirectConfigurationResponse::getUuid)
+                .isEqualTo(UUID.fromString("6f372f07-f8c3-47f7-90f4-f5c3e980f23f"));
     }
 
     @Test
     void allConfigs() {
-        List<RedirectConfiguration> configs = client.get()
-                .uri(API_REDIRECT_CONFIGS_ENDPOINT)
+        List<RedirectConfigurationResponse> configs = client.get()
+                .uri(ENDPOINT_API_REDIRECT_CONFIGS)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<List<RedirectConfiguration>>() {})
+                .expectBody(new ParameterizedTypeReference<List<RedirectConfigurationResponse>>() {})
                 .returnResult()
                 .getResponseBody();
 
         assertThat(configs)
-                .extracting(RedirectConfiguration::getUuid)
+                .extracting(RedirectConfigurationResponse::getUuid)
                 .contains(UUID.fromString("126147c0-05a9-4a83-8b59-f3c8763a85c0"),UUID.fromString("6f372f07-f8c3-47f7-90f4-f5c3e980f23f"));
     }
 

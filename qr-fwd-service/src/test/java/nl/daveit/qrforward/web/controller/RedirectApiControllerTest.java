@@ -47,8 +47,8 @@ class RedirectApiControllerTest {
         redirectKey2 = new RedirectKey(UUID.randomUUID());
 
         // Insert test data
-        config1 = new RedirectConfiguration(redirectKey1.key(), "https://temp.example.com", 307, true, null);
-        config2 = new RedirectConfiguration(redirectKey2.key(), "https://perm.example.com", 308, true, null);
+        config1 = new RedirectConfiguration(redirectKey1, "https://temp.example.com", 307, true, null);
+        config2 = new RedirectConfiguration(redirectKey2, "https://perm.example.com", 308, true, null);
     }
 
     @Test
@@ -62,8 +62,8 @@ class RedirectApiControllerTest {
                 .bodyJson()
                 .convertTo(InstanceOfAssertFactories.list(RedirectConfiguration.class))
                 .hasSize(2)
-                .extracting(RedirectConfiguration::getUuid)
-                .contains(redirectKey1.key(), redirectKey2.key());
+                .extracting(RedirectConfiguration::getRedirectKey)
+                .contains(redirectKey1, redirectKey2);
     }
 
     @Test
@@ -76,7 +76,7 @@ class RedirectApiControllerTest {
                 .hasStatus(HttpStatus.OK)
                 .bodyJson()
                 .convertTo(RedirectConfiguration.class)
-                .extracting(RedirectConfiguration::getUuid)
-                .isEqualTo(config2.getUuid());
+                .extracting(RedirectConfiguration::getRedirectKey)
+                .isEqualTo(config2.getRedirectKey());
     }
 }

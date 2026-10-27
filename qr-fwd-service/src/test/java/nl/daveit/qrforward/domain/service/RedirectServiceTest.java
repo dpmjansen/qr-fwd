@@ -1,9 +1,9 @@
 package nl.daveit.qrforward.domain.service;
 
 import nl.daveit.qrforward.domain.config.RedirectServiceProperties;
-import nl.daveit.qrforward.domain.model.RedirectKey;
-import nl.daveit.qrforward.domain.spi.RedirectStore;
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.RedirectKey;
+import nl.daveit.qrforward.domain.spi.RedirectConfigurationProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class RedirectServiceTest {
 
     @Mock
-    private RedirectStore redirectStore;
+    private RedirectConfigurationProvider redirectConfigurationProvider;
 
     @Mock
     private CacheManager cacheManager;
@@ -38,25 +38,21 @@ class RedirectServiceTest {
 
     private Cache mockCache;
     private RedirectKey redirectKey1;
-    private RedirectKey redirectKey2;
     private RedirectConfiguration config1;
-    private RedirectConfiguration config2;
 
     @BeforeEach
     void setUp() {
         // Generate test UUIDs
         redirectKey1 = new RedirectKey(UUID.randomUUID());
-        redirectKey2 = new RedirectKey(UUID.randomUUID());
 
         // Insert test data
-        config1 = new RedirectConfiguration(redirectKey1.key(), "https://temp.example.com", 307, true, null);
-        config2 = new RedirectConfiguration(redirectKey2.key(), "https://perm.example.com", 308, true, null);
+        config1 = new RedirectConfiguration(redirectKey1, "https://temp.example.com", 307, true, null);
 
         mockCache = mock(Cache.class);
     }
 
     @Test
-    void testRedirectServiceGetConfigurationByUuid() {
+    void testRedirectServiceGetConfigurationByKey() {
         //given
         when(properties.getCacheName()).thenReturn("foo");
         when(mockCache.get(redirectKey1.key(), RedirectConfiguration.class)).thenReturn(config1);
@@ -67,7 +63,7 @@ class RedirectServiceTest {
 
         // Test retrieving a configuration by UUID
         assertThat(config).isPresent();
-        assertThat(config.get().getUuid()).isEqualTo(redirectKey1.key());
+        assertThat(config.get().getRedirectKey()).isEqualTo(redirectKey1);
         assertThat(config.get().getDestinationUrl()).isEqualTo("https://temp.example.com");
         assertThat(config.get().getRedirectType()).isEqualTo(307);
     }

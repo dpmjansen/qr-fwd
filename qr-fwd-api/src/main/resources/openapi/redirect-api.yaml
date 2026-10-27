@@ -28,7 +28,7 @@ paths:
       responses:
         '201':
           description: Created new configuration
-  /api/redirect/{uuid}:
+  /api/redirect/configurations/{uuid}:
     get:
       description: Retrieve single redirect configuration
       parameters:
@@ -94,6 +94,8 @@ components:
           enum: [ 307, 308 ]
         description:
           type: string
+        enabled:
+          type: boolean
     RedirectConfigurationResponse:
       type: object
       properties:

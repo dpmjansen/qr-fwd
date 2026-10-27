@@ -9,7 +9,7 @@ public class RedirectConfigurationMapper {
     public nl.daveit.qrforward.generated.web.model.RedirectConfiguration fromDomain(RedirectConfiguration domain) {
 
         var web = new nl.daveit.qrforward.generated.web.model.RedirectConfiguration();
-        web.setUuid(domain.getUuid());
+        web.setUuid(domain.getRedirectKey().key());
         web.setDestinationUrl(domain.getDestinationUrl());
         web.setRedirectType(nl.daveit.qrforward.generated.web.model.RedirectConfiguration.RedirectTypeEnum.fromValue(domain.getRedirectType()));
         web.setEnabled(domain.getEnabled());

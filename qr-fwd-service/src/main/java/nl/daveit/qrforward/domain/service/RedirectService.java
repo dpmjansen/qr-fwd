@@ -2,7 +2,7 @@ package nl.daveit.qrforward.domain.service;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
 import nl.daveit.qrforward.domain.config.RedirectServiceProperties;
-import nl.daveit.qrforward.domain.spi.RedirectStore;
+import nl.daveit.qrforward.domain.spi.RedirectConfigurationProvider;
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import org.springframework.cache.Cache;
@@ -18,15 +18,15 @@ import java.util.*;
 @Service
 public class RedirectService implements RedirectApi {
 
-    private final RedirectStore redirectStore;
+    private final RedirectConfigurationProvider redirectConfigurationProvider;
     private final CacheManager cacheManager;
     private final RedirectServiceProperties properties;
 
     public RedirectService(
-            RedirectStore redirectStore,
+            RedirectConfigurationProvider redirectConfigurationProvider,
             CacheManager cacheManager,
             RedirectServiceProperties properties) {
-        this.redirectStore = redirectStore;
+        this.redirectConfigurationProvider = redirectConfigurationProvider;
         this.cacheManager = cacheManager;
         this.properties = properties;
 
@@ -40,10 +40,10 @@ public class RedirectService implements RedirectApi {
     public void loadAllConfigurationsIntoCache() {
         Cache cache = getCache();
         if (cache != null) {
-            List<RedirectConfiguration> configurations = redirectStore.getAllRedirectConfigurations();
+            List<RedirectConfiguration> configurations = redirectConfigurationProvider.getAllRedirectConfigurations();
             configurations.forEach(config -> {
-                if (config.getUuid() != null) {
-                    cache.put(config.getUuid(), config);
+                if (config.getRedirectKey() != null) {
+                    cache.put(config.getRedirectKey(), config);
                 }
             });
         }
@@ -68,13 +68,13 @@ public class RedirectService implements RedirectApi {
         }
 
         // If not in cache or caching disabled, check database
-        Optional<RedirectConfiguration> config = redirectStore.getById(redirectKey);
+        Optional<RedirectConfiguration> config = redirectConfigurationProvider.getById(redirectKey);
         
         // If found and caching is enabled, add to cache
         config.ifPresent(c -> {
             Cache cacheToUse = getCache();
-            if (cacheToUse != null && c.getUuid() != null) {
-                cacheToUse.put(c.getUuid(), c);
+            if (cacheToUse != null && c.getRedirectKey() != null) {
+                cacheToUse.put(c.getRedirectKey(), c);
             }
         });
 
@@ -88,7 +88,7 @@ public class RedirectService implements RedirectApi {
      */
     @Override
     public List<RedirectConfiguration> getAllConfigurations() {
-        return redirectStore.getAllRedirectConfigurations();
+        return redirectConfigurationProvider.getAllRedirectConfigurations();
     }
 
     private Cache getCache() {

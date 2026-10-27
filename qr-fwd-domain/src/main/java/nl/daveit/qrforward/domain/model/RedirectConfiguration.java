@@ -1,9 +1,7 @@
 package nl.daveit.qrforward.domain.model;
 
-import java.util.UUID;
-
 public final class RedirectConfiguration {
-    private UUID uuid;
+    private RedirectKey redirectKey;
     private String destinationUrl;
     private Integer redirectType;
     private Boolean enabled;
@@ -11,16 +9,16 @@ public final class RedirectConfiguration {
 
     public RedirectConfiguration(){}
 
-    public RedirectConfiguration(UUID uuid, String destinationUrl, Integer redirectType, Boolean enabled, String description) {
-        this.uuid = uuid;
+    public RedirectConfiguration(RedirectKey redirectKey, String destinationUrl, Integer redirectType, Boolean enabled, String description) {
+        this.redirectKey = redirectKey;
         this.destinationUrl = destinationUrl;
         this.redirectType = redirectType;
         this.enabled = enabled;
         this.description = description;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public RedirectKey getRedirectKey() {
+        return redirectKey;
     }
 
     public String getDestinationUrl() {
@@ -39,8 +37,8 @@ public final class RedirectConfiguration {
         return description;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setRedirectKey(RedirectKey redirectKey) {
+        this.redirectKey = redirectKey;
     }
 
     public void setDestinationUrl(String destinationUrl) {
