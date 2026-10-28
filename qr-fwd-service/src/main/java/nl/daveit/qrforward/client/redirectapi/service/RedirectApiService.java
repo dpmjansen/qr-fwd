@@ -1,6 +1,6 @@
 package nl.daveit.qrforward.client.redirectapi.service;
 
-import nl.daveit.qrforward.generated.web.model.RedirectConfiguration;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
 
@@ -10,9 +10,9 @@ import java.util.UUID;
 public interface RedirectApiService {
 
     @GetExchange("/api/redirect/configurations/{uuid}")
-    RedirectConfiguration getConfiguration(@PathVariable UUID uuid);
+    RedirectConfigurationResponse getConfiguration(@PathVariable UUID uuid);
 
     @GetExchange("/api/redirect/configurations")
-    List<RedirectConfiguration> getAllConfigurations();
+    List<RedirectConfigurationResponse> getAllConfigurations();
 
 }

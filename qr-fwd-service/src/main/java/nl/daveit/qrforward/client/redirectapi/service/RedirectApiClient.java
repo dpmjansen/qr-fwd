@@ -3,6 +3,7 @@ package nl.daveit.qrforward.client.redirectapi.service;
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.domain.spi.RedirectConfigurationProvider;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -25,7 +26,7 @@ public class RedirectApiClient implements RedirectConfigurationProvider {
 
     @Override
     public Optional<RedirectConfiguration> getById(RedirectKey redirectKey) {
-        nl.daveit.qrforward.generated.web.model.RedirectConfiguration configuration = client.getConfiguration(redirectKey.key());
+        var configuration = client.getConfiguration(redirectKey.key());
         return Optional.ofNullable(configuration).map(this::toDomain);
     }
 
@@ -34,7 +35,7 @@ public class RedirectApiClient implements RedirectConfigurationProvider {
         return client.getAllConfigurations().stream().map(this::toDomain).toList();
     }
 
-    private RedirectConfiguration toDomain(nl.daveit.qrforward.generated.web.model.RedirectConfiguration config) {
+    private RedirectConfiguration toDomain(RedirectConfigurationResponse config) {
         var domain = new RedirectConfiguration();
         domain.setRedirectKey(new RedirectKey(config.getUuid()));
         domain.setDestinationUrl(config.getDestinationUrl());

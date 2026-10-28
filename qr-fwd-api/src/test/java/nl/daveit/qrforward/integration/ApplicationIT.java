@@ -1,12 +1,10 @@
 package nl.daveit.qrforward.integration;
 
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
-import nl.daveit.qrforward.domain.model.RedirectKey;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openapitools.model.RedirectConfigurationResponse;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

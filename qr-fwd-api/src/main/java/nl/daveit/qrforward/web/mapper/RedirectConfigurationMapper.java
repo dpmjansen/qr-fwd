@@ -2,8 +2,8 @@ package nl.daveit.qrforward.web.mapper;
 
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
-import org.openapitools.model.RedirectConfigurationRequest;
-import org.openapitools.model.RedirectConfigurationResponse;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationRequest;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import org.springframework.stereotype.Component;
 
 @Component

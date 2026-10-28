@@ -95,16 +95,17 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>redirect-config</id>
+                        <id>redirect-api</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi/redirect-config.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/redirect-api.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
-                                <modelPackage>nl.daveit.qrforward.generated.web.model</modelPackage>
+                                <apiPackage>nl.daveit.qrforward.openapi.api</apiPackage>
+                                <modelPackage>nl.daveit.qrforward.openapi.model</modelPackage>
                                 <interfaceOnly>true</interfaceOnly>
                             </configOptions>
                             <output>${project.build.directory}/generated-sources</output>

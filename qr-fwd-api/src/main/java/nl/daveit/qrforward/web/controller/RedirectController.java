@@ -3,9 +3,9 @@ package nl.daveit.qrforward.web.controller;
 import jakarta.validation.Valid;
 import nl.daveit.qrforward.domain.api.RedirectApi;
 import nl.daveit.qrforward.domain.model.RedirectKey;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationRequest;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import nl.daveit.qrforward.web.mapper.RedirectConfigurationMapper;
-import org.openapitools.model.RedirectConfigurationRequest;
-import org.openapitools.model.RedirectConfigurationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

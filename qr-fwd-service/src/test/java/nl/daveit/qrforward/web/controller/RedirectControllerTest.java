@@ -3,6 +3,7 @@ package nl.daveit.qrforward.web.controller;
 import nl.daveit.qrforward.domain.api.RedirectApi;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import nl.daveit.qrforward.web.mapper.RedirectConfigurationMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +44,10 @@ class RedirectControllerTest {
         UUID reqId = UUID.randomUUID();
 
         RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://temp.example.com", 307, true, null);
-        nl.daveit.qrforward.generated.web.model.RedirectConfiguration web = new nl.daveit.qrforward.generated.web.model.RedirectConfiguration();
+        var web = new RedirectConfigurationResponse();
         web.setUuid(reqId);
         web.setDestinationUrl(domainConfig.getDestinationUrl());
-        web.setRedirectType(nl.daveit.qrforward.generated.web.model.RedirectConfiguration.RedirectTypeEnum.fromValue(domainConfig.getRedirectType()));
+        web.setRedirectType(RedirectConfigurationResponse.RedirectTypeEnum.fromValue(domainConfig.getRedirectType()));
         web.setEnabled(true);
 
         when(redirectApi.getRedirectConfiguration(any(RedirectKey.class))).thenReturn(Optional.of(domainConfig));
@@ -64,10 +65,10 @@ class RedirectControllerTest {
         UUID reqId = UUID.randomUUID();
 
         RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://perm.example.com", 308, true, null);
-        nl.daveit.qrforward.generated.web.model.RedirectConfiguration web = new nl.daveit.qrforward.generated.web.model.RedirectConfiguration();
+        var web = new RedirectConfigurationResponse();
         web.setUuid(reqId);
         web.setDestinationUrl(domainConfig.getDestinationUrl());
-        web.setRedirectType(nl.daveit.qrforward.generated.web.model.RedirectConfiguration.RedirectTypeEnum.fromValue(domainConfig.getRedirectType()));
+        web.setRedirectType(RedirectConfigurationResponse.RedirectTypeEnum.fromValue(domainConfig.getRedirectType()));
         web.setEnabled(true);
 
         when(redirectApi.getRedirectConfiguration(any(RedirectKey.class))).thenReturn(Optional.of(domainConfig));

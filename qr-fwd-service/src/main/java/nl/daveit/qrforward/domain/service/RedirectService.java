@@ -81,16 +81,6 @@ public class RedirectService implements RedirectApi {
         return config;
     }
 
-    /**
-     * Gets all redirect configurations.
-     * 
-     * @return list of all configurations
-     */
-    @Override
-    public List<RedirectConfiguration> getAllConfigurations() {
-        return redirectConfigurationProvider.getAllRedirectConfigurations();
-    }
-
     private Cache getCache() {
         return cacheManager.getCache(properties.getCacheName());
     }

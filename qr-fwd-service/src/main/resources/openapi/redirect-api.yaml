@@ -1,0 +1,113 @@
+openapi: 3.1.0
+info:
+  title: Redirect API
+  description: Redirect API
+  version: 1.0.0
+
+paths:
+  /api/redirect/configurations:
+    get:
+      description: Retrieve all redirect configurations
+      responses:
+        '200':
+          description: all configurations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RedirectConfigurationResponse'
+    post:
+      description: Create new redirect configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RedirectConfigurationRequest'
+      responses:
+        '201':
+          description: Created new configuration
+  /api/redirect/configurations/{uuid}:
+    get:
+      description: Retrieve single redirect configuration
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: single config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectConfigurationResponse'
+    put:
+      description: Update existing redirect configuration
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RedirectConfigurationRequest'
+      responses:
+        '204':
+          description: Updated configuration
+    delete:
+      description: Delete or invalidate existing redirect configuration
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deactived configuration
+        '404':
+          description: Configuration does not exist
+
+
+components:
+  schemas:
+    RedirectConfigurationRequest:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        destinationUrl:
+          type: string
+        redirectType:
+          type: integer
+          enum: [ 307, 308 ]
+        description:
+          type: string
+        enabled:
+          type: boolean
+    RedirectConfigurationResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        destinationUrl:
+          type: string
+        redirectType:
+          type: integer
+          enum: [307, 308]
+        enabled:
+          type: boolean
+        description:
+          type: string

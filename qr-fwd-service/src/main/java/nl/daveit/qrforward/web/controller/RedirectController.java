@@ -2,7 +2,7 @@ package nl.daveit.qrforward.web.controller;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
 import nl.daveit.qrforward.domain.model.RedirectKey;
-import nl.daveit.qrforward.generated.web.model.RedirectConfiguration;
+import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
 import nl.daveit.qrforward.web.mapper.RedirectConfigurationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,18 +54,12 @@ public class RedirectController {
         }
         
         // Find matching configuration by UUID
-        Optional<RedirectConfiguration> config = redirectApi.getRedirectConfiguration(redirectKey).map(mapper::fromDomain);
+        Optional<RedirectConfigurationResponse> config = redirectApi.getRedirectConfiguration(redirectKey).map(mapper::fromDomain);
         
-        if (config.isPresent() && config.get().getEnabled()) {
-            RedirectConfiguration redirectConfig = config.get();
+        if (config.isPresent()) {
+            RedirectConfigurationResponse redirectConfig = config.get();
             String destinationUrl = redirectConfig.getDestinationUrl();
-            RedirectConfiguration.RedirectTypeEnum redirectType = redirectConfig.getRedirectType();
-            
-            // Validate destination URL
-            if (destinationUrl == null || destinationUrl.trim().isEmpty()) {
-                LOGGER.error("Destination URL is not configured");
-                return ResponseEntity.badRequest().build();
-            }
+            RedirectConfigurationResponse.RedirectTypeEnum redirectType = redirectConfig.getRedirectType();
             
             // Try to validate destination URL
             try {
@@ -78,10 +72,10 @@ public class RedirectController {
 
             } catch (URISyntaxException e) {
                 LOGGER.error("Invalid destination URL: " + destinationUrl);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.internalServerError().build();
             }
         } else {
-            LOGGER.info("No redirect configuration found for UUID: " + uuid);
+            LOGGER.info("No active redirect configuration found for UUID: " + uuid);
             return ResponseEntity.notFound().build();
         }
     }

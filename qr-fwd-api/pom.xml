@@ -121,7 +121,8 @@
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
-                                <basePackage>nl.daveit.qrforward.generated</basePackage>
+                                <apiPackage>nl.daveit.qrforward.openapi.api</apiPackage>
+                                <modelPackage>nl.daveit.qrforward.openapi.model</modelPackage>
                                 <interfaceOnly>true</interfaceOnly>
                             </configOptions>
                             <output>${project.build.directory}/generated-sources</output>

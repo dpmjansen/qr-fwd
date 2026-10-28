@@ -12,12 +12,6 @@ import org.springframework.stereotype.Component;
 public class RedirectServiceProperties {
 
     /**
-     * Default redirect status code to use when not specified in configuration.
-     * Valid values: 307 or 308
-     */
-    private int defaultStatusCode = 308;
-
-    /**
      * Cache name for redirect configurations.
      */
     private String cacheName = "redirectConfigurations";
@@ -26,16 +20,6 @@ public class RedirectServiceProperties {
      * Cache TTL (time to live) in milliseconds.
      */
     private long cacheTtlMs = 600000; // 10 minutes
-
-    // Getters and Setters
-
-    public int getDefaultStatusCode() {
-        return defaultStatusCode;
-    }
-
-    public void setDefaultStatusCode(int defaultStatusCode) {
-        this.defaultStatusCode = defaultStatusCode;
-    }
 
     public String getCacheName() {
         return cacheName;
