@@ -18,10 +18,8 @@ public class RedirectApiClient implements RedirectConfigurationProvider {
 
     private final RedirectApiService client;
 
-    public RedirectApiClient(@Value("qrfwd.api.baseUrl") String url) {
-        var restClient = RestClient.create(url);
-        var proxyFactory = HttpServiceProxyFactory.builder().exchangeAdapter(RestClientAdapter.create(restClient)).build();
-        client = proxyFactory.createClient(RedirectApiService.class);
+    public RedirectApiClient(RedirectApiService client) {
+        this.client = client;
     }
 
     @Override

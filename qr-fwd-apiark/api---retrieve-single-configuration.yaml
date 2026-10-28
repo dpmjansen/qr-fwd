@@ -1,0 +1,5 @@
+name: API - Retrieve single configuration
+method: GET
+url: '{{baseUrlApi}}/api/redirect/configurations/:uuid'
+params:
+  uuid: 126147c0-05a9-4a83-8b59-f3c8763a85c0

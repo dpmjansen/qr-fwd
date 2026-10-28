@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/redirect")
+@RequestMapping("/api/redirect/configurations")
 public class RedirectController {
 
     private final RedirectApi redirectApi;
@@ -24,13 +24,13 @@ public class RedirectController {
         this.mapper = mapper;
     }
 
-    @GetMapping("/configurations")
+    @GetMapping
     public ResponseEntity<List<RedirectConfigurationResponse>> getConfigurations(){
         List<RedirectConfigurationResponse> configs = redirectApi.getAllRedirectConfigurations().stream().map(mapper::fromDomain).toList();
         return ResponseEntity.ok(configs);
     }
 
-    @PostMapping("/configurations")
+    @PostMapping
     public ResponseEntity<Void> addConfiguration(@Valid @RequestBody RedirectConfigurationRequest request){
         var domain = mapper.toDomain(request);
         redirectApi.addNewConfiguration(domain);

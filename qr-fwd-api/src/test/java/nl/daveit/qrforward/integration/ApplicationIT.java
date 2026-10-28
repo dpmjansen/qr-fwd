@@ -66,7 +66,7 @@ public class ApplicationIT {
     @Test
     void nonExistingConfig() {
         client.get()
-                .uri(ENDPOINT_API_REDIRECT + "/" + UUID.randomUUID())
+                .uri(ENDPOINT_API_REDIRECT_CONFIGS + "/" + UUID.randomUUID())
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -74,7 +74,7 @@ public class ApplicationIT {
     @Test
     void existingTempRedirect() {
         var body = client.get()
-                .uri(ENDPOINT_API_REDIRECT + "/126147c0-05a9-4a83-8b59-f3c8763a85c0")
+                .uri(ENDPOINT_API_REDIRECT_CONFIGS + "/126147c0-05a9-4a83-8b59-f3c8763a85c0")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(new ParameterizedTypeReference<RedirectConfigurationResponse>() {})
@@ -89,7 +89,7 @@ public class ApplicationIT {
     @Test
     void existingPermanentRedirect() {
         var body = client.get()
-                .uri(ENDPOINT_API_REDIRECT + "/6f372f07-f8c3-47f7-90f4-f5c3e980f23f")
+                .uri(ENDPOINT_API_REDIRECT_CONFIGS + "/6f372f07-f8c3-47f7-90f4-f5c3e980f23f")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(new ParameterizedTypeReference<RedirectConfigurationResponse>() {})
