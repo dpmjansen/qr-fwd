@@ -1,9 +1,8 @@
 package nl.daveit.qrforward.web.controller;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
+import nl.daveit.qrforward.domain.model.RedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
-import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
-import nl.daveit.qrforward.web.mapper.RedirectConfigurationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +26,9 @@ public class RedirectController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RedirectController.class);
 
     private final RedirectApi redirectApi;
-    private final RedirectConfigurationMapper mapper;
 
-    public RedirectController(RedirectApi redirectApi, RedirectConfigurationMapper mapper) {
+    public RedirectController(RedirectApi redirectApi) {
         this.redirectApi = redirectApi;
-        this.mapper = mapper;
     }
 
     /**
@@ -45,29 +42,23 @@ public class RedirectController {
     public ResponseEntity<Void> handleRedirect(@PathVariable UUID uuid) {
         
         // Parse UUID
-        RedirectKey redirectKey;
-        try {
-            redirectKey = new RedirectKey(uuid);
-        } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid UUID format: " + uuid);
-            return ResponseEntity.badRequest().build();
-        }
-        
+        RedirectKey redirectKey = new RedirectKey(uuid);
+
         // Find matching configuration by UUID
-        Optional<RedirectConfigurationResponse> config = redirectApi.getRedirectConfiguration(redirectKey).map(mapper::fromDomain);
+        Optional<RedirectConfiguration> config = redirectApi.getRedirectConfiguration(redirectKey);
         
         if (config.isPresent()) {
-            RedirectConfigurationResponse redirectConfig = config.get();
+            RedirectConfiguration redirectConfig = config.get();
             String destinationUrl = redirectConfig.getDestinationUrl();
-            RedirectConfigurationResponse.RedirectTypeEnum redirectType = redirectConfig.getRedirectType();
+            Integer redirectType = redirectConfig.getRedirectType();
             
             // Try to validate destination URL
             try {
                 URI destinationUri = new URI(destinationUrl);
                 return ResponseEntity
-                        .status(redirectType.getValue())
+                        .status(redirectType)
                         .header("Location", destinationUri.toASCIIString())
-                        .header("X-Redirect-UUID", redirectConfig.getUuid().toString())
+                        .header("X-Redirect-UUID", redirectConfig.getRedirectKey().key().toString())
                         .build();
 
             } catch (URISyntaxException e) {

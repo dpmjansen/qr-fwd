@@ -1,10 +1,8 @@
 package nl.daveit.qrforward.web.controller;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
-import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.domain.model.RedirectConfiguration;
-import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
-import nl.daveit.qrforward.web.mapper.RedirectConfigurationMapper;
+import nl.daveit.qrforward.domain.model.RedirectKey;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -25,15 +23,13 @@ import static org.mockito.Mockito.when;
 class RedirectControllerTest {
 
     private static final String REDIRECT_ENDPOINT = "/redirect";
+    private static final String REDIRECT_HEADER = "X-Redirect-UUID";
 
     @Autowired
     MockMvcTester mockMvc;
 
     @MockitoBean
     private RedirectApi redirectApi;
-
-    @MockitoBean
-    private RedirectConfigurationMapper mapper;
 
     @MockitoBean //todo check it this can be removed
     private CacheManager cacheManager;
@@ -44,19 +40,14 @@ class RedirectControllerTest {
         UUID reqId = UUID.randomUUID();
 
         RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://temp.example.com", 307, true, null);
-        var web = new RedirectConfigurationResponse();
-        web.setUuid(reqId);
-        web.setDestinationUrl(domainConfig.getDestinationUrl());
-        web.setRedirectType(RedirectConfigurationResponse.RedirectTypeEnum.fromValue(domainConfig.getRedirectType()));
-        web.setEnabled(true);
 
         when(redirectApi.getRedirectConfiguration(any(RedirectKey.class))).thenReturn(Optional.of(domainConfig));
-        when(mapper.fromDomain(domainConfig)).thenReturn(web);
 
         //when / then
         assertThat(mockMvc.perform(MockMvcRequestBuilders.get(REDIRECT_ENDPOINT + "/" + reqId)))
                 .hasStatus(HttpStatus.TEMPORARY_REDIRECT)
-                .hasRedirectedUrl(domainConfig.getDestinationUrl());
+                .hasRedirectedUrl(domainConfig.getDestinationUrl())
+                .hasHeader(REDIRECT_HEADER, domainConfig.getRedirectKey().key().toString());
     }
 
     @Test
@@ -65,19 +56,14 @@ class RedirectControllerTest {
         UUID reqId = UUID.randomUUID();
 
         RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://perm.example.com", 308, true, null);
-        var web = new RedirectConfigurationResponse();
-        web.setUuid(reqId);
-        web.setDestinationUrl(domainConfig.getDestinationUrl());
-        web.setRedirectType(RedirectConfigurationResponse.RedirectTypeEnum.fromValue(domainConfig.getRedirectType()));
-        web.setEnabled(true);
 
         when(redirectApi.getRedirectConfiguration(any(RedirectKey.class))).thenReturn(Optional.of(domainConfig));
-        when(mapper.fromDomain(domainConfig)).thenReturn(web);
 
         //when / then
         assertThat(mockMvc.perform(MockMvcRequestBuilders.get(REDIRECT_ENDPOINT + "/" + reqId)))
                 .hasStatus(HttpStatus.PERMANENT_REDIRECT)
-                .hasRedirectedUrl(domainConfig.getDestinationUrl());
+                .hasRedirectedUrl(domainConfig.getDestinationUrl())
+                .hasHeader(REDIRECT_HEADER, domainConfig.getRedirectKey().key().toString());
     }
 
 }
