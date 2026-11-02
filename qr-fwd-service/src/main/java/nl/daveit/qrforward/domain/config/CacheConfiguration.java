@@ -8,8 +8,6 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Cache configuration for the redirect service.
  * Uses Caffeine cache for in-memory caching of redirect configurations.
@@ -32,10 +30,10 @@ public class CacheConfiguration {
     @ConditionalOnProperty(prefix = "app.redirect", name = "cache-enabled", havingValue = "true", matchIfMissing = true)
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
-        
+
         // Configure the redirect configurations cache
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(redirectServiceProperties.getCacheTtlMs(), TimeUnit.MILLISECONDS)
+                .expireAfter(new PerEntryExpiry())
                 .maximumSize(1000)
                 .recordStats());
         

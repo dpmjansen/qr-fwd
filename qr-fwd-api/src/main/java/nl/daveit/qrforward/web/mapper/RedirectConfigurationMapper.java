@@ -1,6 +1,6 @@
 package nl.daveit.qrforward.web.mapper;
 
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.openapi.model.RedirectConfigurationRequest;
 import nl.daveit.qrforward.openapi.model.RedirectConfigurationResponse;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedirectConfigurationMapper {
 
-    public RedirectConfigurationResponse fromDomain(RedirectConfiguration domain) {
+    public RedirectConfigurationResponse fromDomain(SimpleRedirectConfiguration domain) {
 
         var web = new RedirectConfigurationResponse();
         web.setUuid(domain.getRedirectKey().key());
@@ -21,8 +21,8 @@ public class RedirectConfigurationMapper {
         return web;
     }
 
-    public RedirectConfiguration toDomain(RedirectConfigurationRequest request) {
-        var domain = new RedirectConfiguration();
+    public SimpleRedirectConfiguration toDomain(RedirectConfigurationRequest request) {
+        var domain = new SimpleRedirectConfiguration();
         domain.setRedirectKey(new RedirectKey(request.getUuid()));
         domain.setDestinationUrl(request.getDestinationUrl());
         domain.setRedirectType(request.getRedirectType().getValue());

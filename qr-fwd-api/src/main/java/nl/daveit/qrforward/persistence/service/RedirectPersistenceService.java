@@ -1,6 +1,6 @@
 package nl.daveit.qrforward.persistence.service;
 
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.domain.spi.RedirectStore;
 import nl.daveit.qrforward.persistence.repository.RedirectConfigurationRepository;
@@ -20,12 +20,12 @@ public class RedirectPersistenceService implements RedirectStore{
     }
 
     @Override
-    public List<RedirectConfiguration> getAllRedirectConfigurations() {
+    public List<SimpleRedirectConfiguration> getAllRedirectConfigurations() {
         return repository.findAll().stream().map(this::toDomain).toList();
     }
 
     @Override
-    public boolean addNewConfiguration(RedirectConfiguration redirectConfiguration) {
+    public boolean addNewConfiguration(SimpleRedirectConfiguration redirectConfiguration) {
         var persistence = toPersistence(redirectConfiguration);
         Instant now = Instant.now();
         persistence.setCreatedAt(now);
@@ -35,12 +35,12 @@ public class RedirectPersistenceService implements RedirectStore{
     }
 
     @Override
-    public Optional<RedirectConfiguration> getRedirectConfiguration(RedirectKey redirectKey) {
+    public Optional<SimpleRedirectConfiguration> getRedirectConfiguration(RedirectKey redirectKey) {
         return repository.findByUuid(redirectKey.key()).map(this::toDomain);
     }
 
     @Override
-    public boolean updateRedirectConfiguration(RedirectConfiguration redirectConfiguration) {
+    public boolean updateRedirectConfiguration(SimpleRedirectConfiguration redirectConfiguration) {
         var config = repository.findByUuid(redirectConfiguration.getRedirectKey().key());
 
         if(config.isEmpty()){
@@ -64,11 +64,11 @@ public class RedirectPersistenceService implements RedirectStore{
         return result.isPresent();
     }
 
-    private RedirectConfiguration toDomain(nl.daveit.qrforward.persistence.model.RedirectConfiguration persistence) {
-        return new RedirectConfiguration(new RedirectKey(persistence.getUuid()), persistence.getDestinationUrl(), persistence.getRedirectType(), persistence.getEnabled(), persistence.getDescription());
+    private SimpleRedirectConfiguration toDomain(nl.daveit.qrforward.persistence.model.RedirectConfiguration persistence) {
+        return new SimpleRedirectConfiguration(new RedirectKey(persistence.getUuid()), persistence.getDestinationUrl(), persistence.getRedirectType(), persistence.getEnabled(), persistence.getDescription());
     }
 
-    private nl.daveit.qrforward.persistence.model.RedirectConfiguration toPersistence(RedirectConfiguration domain) {
+    private nl.daveit.qrforward.persistence.model.RedirectConfiguration toPersistence(SimpleRedirectConfiguration domain) {
         return new nl.daveit.qrforward.persistence.model.RedirectConfiguration(domain.getRedirectKey().key(), domain.getDestinationUrl(), domain.getRedirectType(), domain.getEnabled(), domain.getDescription(),null,null);
     }
 }

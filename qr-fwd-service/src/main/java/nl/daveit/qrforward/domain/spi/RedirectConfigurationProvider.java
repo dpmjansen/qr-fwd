@@ -1,14 +1,14 @@
 package nl.daveit.qrforward.domain.spi;
 
 import nl.daveit.qrforward.domain.model.RedirectKey;
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface RedirectConfigurationProvider {
 
-    Optional<RedirectConfiguration> getById(RedirectKey redirectKey);
+    Optional<SimpleRedirectConfiguration> getById(RedirectKey redirectKey);
 
-    List<RedirectConfiguration> getAllRedirectConfigurations();
+    List<SimpleRedirectConfiguration> getAllRedirectConfigurations();
 }

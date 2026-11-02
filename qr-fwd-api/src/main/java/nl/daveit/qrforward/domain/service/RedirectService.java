@@ -1,7 +1,7 @@
 package nl.daveit.qrforward.domain.service;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.domain.spi.RedirectStore;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,22 @@ public class RedirectService implements RedirectApi {
     }
 
     @Override
-    public List<RedirectConfiguration> getAllRedirectConfigurations() {
+    public List<SimpleRedirectConfiguration> getAllRedirectConfigurations() {
         return redirectStore.getAllRedirectConfigurations();
     }
 
     @Override
-    public boolean addNewConfiguration(RedirectConfiguration redirectConfiguration) {
+    public boolean addNewConfiguration(SimpleRedirectConfiguration redirectConfiguration) {
         return redirectStore.addNewConfiguration(redirectConfiguration);
     }
 
     @Override
-    public Optional<RedirectConfiguration> getRedirectConfiguration(RedirectKey redirectKey) {
+    public Optional<SimpleRedirectConfiguration> getRedirectConfiguration(RedirectKey redirectKey) {
         return redirectStore.getRedirectConfiguration(redirectKey);
     }
 
     @Override
-    public boolean updateRedirectConfiguration(RedirectConfiguration redirectConfiguration) {
+    public boolean updateRedirectConfiguration(SimpleRedirectConfiguration redirectConfiguration) {
         return redirectStore.updateRedirectConfiguration(redirectConfiguration);
     }
 

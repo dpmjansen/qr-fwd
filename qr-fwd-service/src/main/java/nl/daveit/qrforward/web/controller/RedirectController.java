@@ -1,7 +1,7 @@
 package nl.daveit.qrforward.web.controller;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +45,10 @@ public class RedirectController {
         RedirectKey redirectKey = new RedirectKey(uuid);
 
         // Find matching configuration by UUID
-        Optional<RedirectConfiguration> config = redirectApi.getRedirectConfiguration(redirectKey);
+        Optional<SimpleRedirectConfiguration> config = redirectApi.getRedirectConfiguration(redirectKey);
         
         if (config.isPresent()) {
-            RedirectConfiguration redirectConfig = config.get();
+            SimpleRedirectConfiguration redirectConfig = config.get();
             String destinationUrl = redirectConfig.getDestinationUrl();
             Integer redirectType = redirectConfig.getRedirectType();
             

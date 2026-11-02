@@ -1,7 +1,7 @@
 package nl.daveit.qrforward.domain.service;
 
 import nl.daveit.qrforward.domain.config.RedirectServiceProperties;
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import nl.daveit.qrforward.domain.spi.RedirectConfigurationProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class RedirectServiceTest {
 
     private Cache mockCache;
     private RedirectKey redirectKey1;
-    private RedirectConfiguration config1;
+    private SimpleRedirectConfiguration config1;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +46,7 @@ class RedirectServiceTest {
         redirectKey1 = new RedirectKey(UUID.randomUUID());
 
         // Insert test data
-        config1 = new RedirectConfiguration(redirectKey1, "https://temp.example.com", 307, true, null);
+        config1 = new SimpleRedirectConfiguration(redirectKey1, "https://temp.example.com", 307, true, null);
 
         mockCache = mock(Cache.class);
     }
@@ -55,11 +55,11 @@ class RedirectServiceTest {
     void testRedirectServiceGetConfigurationByKey() {
         //given
         when(properties.getCacheName()).thenReturn("foo");
-        when(mockCache.get(redirectKey1.key(), RedirectConfiguration.class)).thenReturn(config1);
+        when(mockCache.get(redirectKey1.key(), SimpleRedirectConfiguration.class)).thenReturn(config1);
         when(cacheManager.getCache(anyString())).thenReturn(mockCache);
 
         //when
-        Optional<RedirectConfiguration> config = redirectService.getRedirectConfiguration(redirectKey1);
+        Optional<SimpleRedirectConfiguration> config = redirectService.getRedirectConfiguration(redirectKey1);
 
         // Test retrieving a configuration by UUID
         assertThat(config).isPresent();
@@ -72,7 +72,7 @@ class RedirectServiceTest {
     void testRedirectServiceNoMatch() {
         // Test no match scenario
         RedirectKey redirectKey = new RedirectKey(UUID.randomUUID());
-        Optional<RedirectConfiguration> config = redirectService.getRedirectConfiguration(redirectKey);
+        Optional<SimpleRedirectConfiguration> config = redirectService.getRedirectConfiguration(redirectKey);
 
         assertThat(config).isEmpty();
     }

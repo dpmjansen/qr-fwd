@@ -1,7 +1,7 @@
 package nl.daveit.qrforward.web.controller;
 
 import nl.daveit.qrforward.domain.api.RedirectApi;
-import nl.daveit.qrforward.domain.model.RedirectConfiguration;
+import nl.daveit.qrforward.domain.model.SimpleRedirectConfiguration;
 import nl.daveit.qrforward.domain.model.RedirectKey;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ class RedirectControllerTest {
         //given
         UUID reqId = UUID.randomUUID();
 
-        RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://temp.example.com", 307, true, null);
+        SimpleRedirectConfiguration domainConfig = new SimpleRedirectConfiguration(new RedirectKey(reqId), "https://temp.example.com", 307, true, null);
 
         when(redirectApi.getRedirectConfiguration(any(RedirectKey.class))).thenReturn(Optional.of(domainConfig));
 
@@ -55,7 +55,7 @@ class RedirectControllerTest {
         //given
         UUID reqId = UUID.randomUUID();
 
-        RedirectConfiguration domainConfig = new RedirectConfiguration(new RedirectKey(reqId), "https://perm.example.com", 308, true, null);
+        SimpleRedirectConfiguration domainConfig = new SimpleRedirectConfiguration(new RedirectKey(reqId), "https://perm.example.com", 308, true, null);
 
         when(redirectApi.getRedirectConfiguration(any(RedirectKey.class))).thenReturn(Optional.of(domainConfig));
 
